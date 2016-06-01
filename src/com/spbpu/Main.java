@@ -18,5 +18,11 @@ public class Main {
                 eps, eps1);
         System.out.println("Количество шагов: " + iter);
         System.out.println("Точка минимума: " + x[0] + " " + x[1] + " " + x[2]);
+
+        System.arraycopy(new double[]{2, 1, 3}, 0, x, 0, x.length);
+        System.out.println("\nНьютон: ");
+        iter = NonlinearConjugateMethod.OptimizeNewton(x, FunctionSet::f_new, FunctionSet::gradf_new, eps);
+        System.out.println("Количество шагов: " + iter);
+        System.out.println("Точка минимума: " + x[0] + " " + x[1] + " " + x[2]);
     }
 }

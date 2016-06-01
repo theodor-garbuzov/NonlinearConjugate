@@ -76,4 +76,12 @@ public class VectorOperations {
         return res;
     }
 
+    public static double[][] MatrixMatrixSum(double[][] M1, double[][] M2) {
+        assert(M1.length == M2.length && M1[0].length == M2.length);
+        double[][] res = new double[M1.length][M1[0].length];
+        for (int i = 0; i < M1.length; ++i)
+            for (int j = 0; j < M1[i].length; ++j)
+                res[i][j] = M1[i][j] + M2[i][j];
+        return res;
+    }
 }

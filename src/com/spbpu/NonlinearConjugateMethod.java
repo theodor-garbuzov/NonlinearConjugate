@@ -29,7 +29,7 @@ public class NonlinearConjugateMethod {
     }
 
     public static int OptimizeFletcherReeves(double[] x, Function function, Gradient gradient,
-                               double eps, double eps1) {
+                                              double eps, double eps1) {
         int k = 0;
         double[] x_new = new double[x.length];
         double[] S = new double[x.length];
@@ -49,12 +49,35 @@ public class NonlinearConjugateMethod {
                 System.out.println(k + "!");
             }
             System.arraycopy(gradient.gradf(x_new), 0, grad, 0, grad.length);
-            double beta = VectorVectorMult(gradient.gradf(x_new), MatrixVectorMult(FunctionSet.H, S)) /
-                          VectorVectorMult(S, MatrixVectorMult(FunctionSet.H, S));
+            double beta = VectorVectorMult(gradient.gradf(x_new), MatrixVectorMult(FunctionSet.H_new(x_new), S)) /
+                    VectorVectorMult(S, MatrixVectorMult(FunctionSet.H, S));
             // S_new = - gradf(x) + beta * S
             System.arraycopy(VectorSum(NumberVectorMult(-1, grad), NumberVectorMult(beta, S)), 0,
                     S_new, 0, S_new.length);
             System.arraycopy(S_new, 0, S, 0, S.length);
+            System.arraycopy(x_new, 0, x, 0, x.length);
+            System.out.println(function.f(x) + ", градиент: " + grad[0] + " " + grad[1] + " " + grad[2]);
+            k++;
+        }
+
+        return k;
+    }
+
+    public static int OptimizeNewton(double[] x, Function function, Gradient gradient, double eps) {
+        int k = 0;
+        double[] x_new = new double[x.length];
+        double[] grad = new double[x.length];
+
+        System.arraycopy(gradient.gradf(x), 0, grad, 0, grad.length);
+        System.out.println(function.f(x) + ", градиент: " + grad[0] + " " + grad[1] + " " + grad[2]);
+
+        while(norm2(grad) > eps) {
+            System.arraycopy(VectorSum(x, NumberVectorMult(-1, MatrixVectorMult(FunctionSet.H_inv, grad))), 0, x_new, 0, x_new.length);
+            if (function.f(x_new) >= function.f(x)) {
+                System.out.println(k + "!");
+                return -1;
+            }
+            System.arraycopy(gradient.gradf(x_new), 0, grad, 0, grad.length);
             System.arraycopy(x_new, 0, x, 0, x.length);
             System.out.println(function.f(x) + ", градиент: " + grad[0] + " " + grad[1] + " " + grad[2]);
             k++;
