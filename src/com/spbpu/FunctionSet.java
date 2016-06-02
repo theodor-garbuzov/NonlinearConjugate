@@ -34,13 +34,9 @@ class FunctionSet {
         return grad;
     }
 
-    static double[][] H(double[] x) {
-        int m = H.length;
-        double[][] H_ = new double[m][m];
-        System.arraycopy(H, 0, H_, 0, m);
-        for (int i = 0; i < m; ++i)
-            System.arraycopy(H[i], 0, H_[i], 0, m);
-        return H_;
+    static double[][] H_(double[] x) {
+        double[][] H_add = new double[][]{{0,0,0},{0,0,0},{0,0,0}};
+        return MatrixMatrixSum(H, H_add);
     }
     static double[][] H_new(double[] x) {
         double[][] H_add = new double[][]{

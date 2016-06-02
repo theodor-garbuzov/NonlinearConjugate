@@ -12,6 +12,13 @@ public class Main {
         System.out.println("Количество шагов: " + iter);
         System.out.println("Точка минимума: " + x[0] + " " + x[1] + " " + x[2]);
 
+        System.arraycopy(new double[]{-1, -1, -1}, 0, x, 0, x.length);
+        System.out.println("\nНьютон: ");
+        iter = NonlinearConjugate.OptimizeNewton(x, FunctionSet::f, FunctionSet::gradf,
+                FunctionSet::H_, eps);
+        System.out.println("Количество шагов: " + (iter/3));
+        System.out.println("Точка минимума: " + x[0] + " " + x[1] + " " + x[2]);
+
         System.arraycopy(new double[]{2, 2, 3}, 0, x, 0, x.length);
         System.out.println("\nФлетчер-Ривс: ");
         iter = NonlinearConjugate.OptimizeFletcherReeves(x, FunctionSet::f_new, FunctionSet::gradf_new,
