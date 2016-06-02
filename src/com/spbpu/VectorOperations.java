@@ -84,4 +84,70 @@ public class VectorOperations {
                 res[i][j] = M1[i][j] + M2[i][j];
         return res;
     }
+
+    /**
+     * Inverse matrix using Gauss method
+     * @param M_in input matrix
+     * @return inversed matrix
+     */
+    public static double[][] Inverse(double[][] M_in) {
+        assert(M_in.length == M_in[0].length);
+        int m = M_in.length;
+
+        double[][] M = new double[m][m];
+        System.arraycopy(M_in, 0, M, 0, m);
+        for (int i = 0; i < m; ++i)
+            System.arraycopy(M_in[i], 0, M[i], 0, m);
+
+        double[][] res = new double[m][m];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < m; ++j) {
+                res[i][j] = i == j ? 1 : 0;
+            }
+        }
+        for (int i = 0; i < m; ++i) {
+            for (int k = i; k < m; ++k) {
+                if (Math.abs(M[k][i]) > 1e-10) {
+                    if (i != k) {
+                        SwapRows(M, i, k);
+                        SwapRows(res, i, k);
+                    }
+                    break;
+                }
+                if (k == m - 1) {
+                    return null;
+                }
+            }
+            double d = M[i][i];
+            for (int j = 0; j < m; ++j) {
+                M[i][j] /= d;
+                res[i][j] /= d;
+            }
+            for (int k = i + 1; k < m; ++k) {
+                d = M[k][i];
+                for (int j = 0; j < m; ++j) {
+                    M[k][j] -= M[i][j] * d;
+                    res[k][j] -= res[i][j] * d;
+                }
+            }
+        }
+
+        for (int i = m - 2; i >= 0; --i) {
+            for (int j = m - 1; j > i; --j) {
+                for (int k = 0; k < m; ++k) {
+                    res[i][k] -= res[j][k] * M[i][j];
+                }
+            }
+        }
+        return res;
+    }
+
+    private static void SwapRows(double[][] M, int i, int j) {
+        for (int k = 0; k < M[i].length; ++k) {
+            double tmp = M[i][k];
+            M[i][k] = M[j][k];
+            M[j][k] = tmp;
+        }
+
+    }
 }
